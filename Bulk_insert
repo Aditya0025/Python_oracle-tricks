@@ -21,3 +21,11 @@ def bulk_insert(data_tuple,chunk_size):
 #Chunk Size Matter
 
 bulk_insert(insert,10000)
+
+
+
+
+chunks=[]
+for chunk in pd.read_sql_query(sql,con,chunksize=10000):
+    chunks.append(chunk)
+df_Process = pd.concat(chunks)
