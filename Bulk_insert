@@ -1,0 +1,23 @@
+def chunks(l,n):
+    print('CCCCCCCCCC')
+    for i in range(0,len(l),n):
+        yield l[i:i+n]
+        
+def bulk_insert(data_tuple,chunk_size):
+    size = chunk_size
+    con_new = cx_Oracle.connect('username','pass','ip:port/client')
+    for i,data_chunks in enumerate(chunks(data_tuple,size)):
+        try:
+            cur = con_new.cursor()        
+            sql_2 = """insert into test values (:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:13,:14)""" 
+            cur.executemany(sql_2, data_chunks)
+            con_new.commit()
+            con_new = cx_Oracle.connect('username','pass','ip:port/client')
+            print(cur.rowcount)
+        except:
+            con_new = cx_Oracle.connect('username','pass','ip:port/client')
+            continue
+
+#Chunk Size Matter
+
+bulk_insert(insert,10000)
